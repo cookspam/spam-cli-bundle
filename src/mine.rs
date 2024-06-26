@@ -72,11 +72,11 @@ impl Miner {
                 println!("Last reward took {} seconds to land\n", last_submit_time/1000);
             }
             
-            println!("Main wallet balance: {} ORE", self.get_ore_display_balance(1).await);
+            println!("Main wallet balance: {} SPAM", self.get_ore_display_balance(1).await);
 
-            println!("Current reward rate: {} ORE", reward_rate);
+            println!("Current reward rate: {} SPAM", reward_rate);
             println!("Using priority fee: {} micro-lamports", priority_fee);
-            println!("Avg reward rate: {} ORE", reward_rate_sum as f64 / reward_rate_count as f64);
+            println!("Avg reward rate: {} SPAM", reward_rate_sum as f64 / reward_rate_count as f64);
             if total_times_mined > 0 {
                 println!("Total times mined: {}", total_times_mined);
                 println!("Avg time per mine: {} seconds", (total_submit_mills+total_mining_mills) / total_times_mined / 1000);
@@ -121,7 +121,7 @@ impl Miner {
                 let proof = get_proof(&self.rpc_client, self.signer_by_number(wallet).pubkey()).await;
                 //println!("Proof Hash {} : {}", wallet, proof.hash.to_string());
                 let rewards = (proof.claimable_rewards as f64) / (10f64.powf(ore::TOKEN_DECIMALS as f64));
-                println!("Wallet {} claimable rewards: {} ORE", wallet, rewards);
+                println!("Wallet {} claimable rewards: {} SPAM", wallet, rewards);
                 let start_time = Instant::now();     
                 let (next_hash, nonce) = self.find_next_hash_par(&self.signer_by_number(wallet), proof.hash.into(), treasury.difficulty.into(), threads);
                 total_mine_time += start_time.elapsed().as_millis();
@@ -136,8 +136,9 @@ impl Miner {
 
             // Submit mine tx.
             // Use busses randomly so on each epoch, transactions don't pile on the same busses
-            //println!("\n\nSubmitting hash for validation...");
-             let start_time_submit = Instant::now();                 
+            println!("\n\nSubmitting hash for validation...");
+             let start_time_submit = Instant::now();      
+
             'submit: loop {
                 // Double check we're submitting for the right challenge
                 for wallet in 1..WALLETS+1 {
@@ -177,7 +178,7 @@ impl Miner {
                 // Submit request.
                 let bus = self.find_bus_id(treasury.reward_rate).await;
                 let bus_rewards = (bus.rewards as f64) / (10f64.powf(ore::TOKEN_DECIMALS as f64));
-                println!("\nSending on bus {} ({} ORE)", bus.id, bus_rewards);
+                println!("\nSending on bus {} ({} SPAM)", bus.id, bus_rewards);
                 let cu_limit_ix = ComputeBudgetInstruction::set_compute_unit_limit(CU_LIMIT_MINE);
                 let cu_price_ix =
                     ComputeBudgetInstruction::set_compute_unit_price(priority_fee);
@@ -228,7 +229,7 @@ impl Miner {
         loop {
             let bus_id = rng.gen_range(0..BUS_COUNT);
             if let Ok(bus) = self.get_bus(bus_id).await {
-                if bus.rewards.gt(&reward_rate.saturating_mul(20)) {
+                if bus.rewards.gt(&reward_rate.saturating_mul(1)) {
                     return bus;
                 }
             }

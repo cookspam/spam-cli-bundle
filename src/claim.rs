@@ -41,7 +41,7 @@ impl Miner {
             }
             else {
                 has_ore_rewards = true;
-                println!("{} ORE to claim on address {}", rewardtotal, pubkey);
+                println!("{} SPAM to claim on address {}", rewardtotal, pubkey);
                 let amount = if let Some(amount) = amount {
                     (amount * 10f64.powf(ore::TOKEN_DECIMALS as f64)) as u64
                 } else {
