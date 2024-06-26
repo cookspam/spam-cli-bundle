@@ -87,7 +87,7 @@ impl Miner {
                 .await
             {
                 Ok(sig) => {
-                    println!("{} Ore Claimed Successfully! to {} : {}", amountf, beneficiary, sig);
+                    println!("{} Spam Claimed Successfully! to {} : {}", amountf, beneficiary, sig);
                 }
                 Err(err) => {
                     println!("Error: {:?}", err);
